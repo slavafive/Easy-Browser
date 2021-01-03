@@ -14,7 +14,7 @@ class ViewController: UIViewController, WKNavigationDelegate {
     
     var progressView: UIProgressView!
     
-    var websites = ["apple.com", "hackingwithswift.com", "google.com"]
+    var websites = ["apple.com", "hackingwithswift.com", "twitter.com"]
     
     override func loadView() {
         webView = WKWebView()
@@ -31,11 +31,14 @@ class ViewController: UIViewController, WKNavigationDelegate {
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let refresh = UIBarButtonItem(barButtonSystemItem: .refresh, target: webView, action: #selector(webView.reload))
         
+        let backButton = UIBarButtonItem(title: "Back", style: .plain, target: webView, action: #selector(webView.goBack))
+        let forwardButton = UIBarButtonItem(title: "Forward", style: .plain, target: webView, action: #selector(webView.goForward))
+        
         progressView = UIProgressView(progressViewStyle: .default)
         progressView.sizeToFit()
         let progressButton = UIBarButtonItem(customView: progressView)
         
-        toolbarItems = [progressButton, spacer, refresh]
+        toolbarItems = [progressButton, spacer, refresh, backButton, forwardButton]
         navigationController?.isToolbarHidden = false
         
         // self - who the observer is
@@ -87,6 +90,10 @@ class ViewController: UIViewController, WKNavigationDelegate {
                 }
             }
         }
+        
+        let ac = UIAlertController(title: "The page is forbidden", message: "", preferredStyle: .actionSheet)
+        ac.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(ac, animated: true, completion: nil)
         
         decisionHandler(.cancel)
     }
